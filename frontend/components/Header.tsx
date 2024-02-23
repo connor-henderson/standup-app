@@ -1,28 +1,28 @@
-import React from 'react'
-import Link from 'next/link'
-import { useRouter } from 'next/router'
+import React from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 const Header: React.FC = () => {
-  const router = useRouter()
+  const router = useRouter();
   const isActive: (pathname: string) => boolean = (pathname) =>
-    router.pathname === pathname
+    router.pathname === pathname;
 
   return (
     <nav>
       <div className="left">
-        <Link href="/" className="bold" data-active={isActive('/')}>
+        <Link href="/" className="bold" data-active={isActive('/').toString()}>
           Blog
         </Link>
-        <Link href="/drafts" data-active={isActive('/drafts')}>
+        <Link href="/drafts" data-active={isActive('/drafts').toString()}>
           Drafts
         </Link>
       </div>
       <div className="right">
-        <Link href="/signup" data-active={isActive('/signup')}>
+        <Link href="/signup" data-active={isActive('/signup').toString()}>
           Signup
         </Link>
-        <Link href="/create">
-          <a data-active={isActive('/create')}>+ Create draft</a>
+        <Link href="/create" data-active={isActive('/create').toString()}>
+          + Create draft
         </Link>
       </div>
       <style jsx>{`
@@ -61,7 +61,7 @@ const Header: React.FC = () => {
         }
       `}</style>
     </nav>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
