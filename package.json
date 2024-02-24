@@ -13,7 +13,8 @@
     "env": "ts-node-esm -r ./src/server/init",
     "test": "NODE_ENV=test npm run knex:migrate && jest --detectOpenHandles --forceExit",
     "studio": "npx prisma studio --schema ./src/prisma/schema.prisma",
-    "generate": "npx prisma generate --schema ./src/prisma/schema.prisma"
+    "generate": "npx prisma generate --schema ./src/prisma/schema.prisma",
+    "format": "npx prisma format --schema ./src/prisma/schema.prisma"
   },
   "dependencies": {
     "@next-auth/prisma-adapter": "^1.0.5",

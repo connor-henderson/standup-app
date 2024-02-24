@@ -44,6 +44,33 @@ CREATE TABLE "VerificationToken" (
     "expires" TIMESTAMP(3) NOT NULL
 );
 
+-- CreateTable
+CREATE TABLE "Joke" (
+    "id" TEXT NOT NULL,
+    "line" TEXT,
+    "bitId" TEXT,
+
+    CONSTRAINT "Joke_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Bit" (
+    "id" TEXT NOT NULL,
+    "premise" TEXT,
+    "context" TEXT,
+    "topicId" TEXT,
+
+    CONSTRAINT "Bit_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Topic" (
+    "id" TEXT NOT NULL,
+    "topic" TEXT,
+
+    CONSTRAINT "Topic_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "Account_provider_providerAccountId_key" ON "Account"("provider", "providerAccountId");
 
@@ -64,3 +91,9 @@ ALTER TABLE "Account" ADD CONSTRAINT "Account_userId_fkey" FOREIGN KEY ("userId"
 
 -- AddForeignKey
 ALTER TABLE "Session" ADD CONSTRAINT "Session_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Joke" ADD CONSTRAINT "Joke_bitId_fkey" FOREIGN KEY ("bitId") REFERENCES "Bit"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Bit" ADD CONSTRAINT "Bit_topicId_fkey" FOREIGN KEY ("topicId") REFERENCES "Topic"("id") ON DELETE SET NULL ON UPDATE CASCADE;
