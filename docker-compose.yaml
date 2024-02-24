@@ -1,0 +1,23 @@
+version: '3.8'
+services:
+  standup_app:
+    image: postgres:13.2
+    environment:
+      - POSTGRES_DB=standup_app
+      - POSTGRES_PASSWORD=password
+    ports:
+      - 5432:5432
+    healthcheck:
+      test: ["CMD", "pg_isready --username=postgres"]
+    networks:
+      - standup_app_network
+    volumes:
+      - db-data:/var/lib/postgresql/data
+      - ./docker/postgres-setup:/docker-entrypoint-initdb.d
+    user: postgres
+networks:
+  standup_app_network:
+    name: standup_app_network
+volumes:
+  db-data:
+    driver: local
