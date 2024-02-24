@@ -25,7 +25,9 @@ export default async function handler(
           bits: {
             create: [
               {
-                joke: [],
+                jokes: {
+                  create: [],
+                },
               },
             ],
           },

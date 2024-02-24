@@ -2,6 +2,7 @@ import type { AppProps } from 'next/app';
 import { SessionProvider } from 'next-auth/react';
 import { createContext, useContext, useEffect, useState } from 'react';
 import Head from 'next/head';
+import '../styles/globals.css';
 
 const ContentContext = createContext<any>([]);
 export const useContentContext = () => useContext(ContentContext);
