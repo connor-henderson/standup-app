@@ -11,19 +11,23 @@ export default async function handler(
   res: NextApiResponse
 ) {
   const session = await getSession({ req });
-  if (!session?.user?.email) {
+  const userEmail = session?.user?.email;
+  if (!userEmail) {
     return res.status(401).end(`Unauthorized`);
   }
 
   if (req.method === 'POST') {
     try {
-      const { topic } = req.body;
       const createdTopic = await prisma.topic.create({
         data: {
-          userEmail: session?.user?.email,
-          topic: topic,
+          userEmail,
+          topic: req.body?.topic,
           bits: {
-            create: [],
+            create: [
+              {
+                joke: [],
+              },
+            ],
           },
         },
       });
@@ -32,11 +36,31 @@ export default async function handler(
     } catch (error) {
       console.error('Request error', error);
       res.status(500).json({
-        error: 'Error creating topic and bit',
+        error: 'Error creating topic',
         details: error,
       });
     }
   } else if (req.method === 'GET') {
+    try {
+      const topics = await prisma.topic.findMany({
+        where: { userEmail },
+        include: {
+          bits: {
+            include: {
+              jokes: true,
+            },
+          },
+        },
+      });
+
+      res.status(200).json(topics);
+    } catch (error) {
+      console.error('Request error', error);
+      res.status(500).json({
+        error: 'Error fetching topics',
+        details: error,
+      });
+    }
   } else {
     res.setHeader('Allow', ['GET', 'POST', 'PATCH']);
     return res.status(405).end(`Method ${req.method} Not Allowed`);

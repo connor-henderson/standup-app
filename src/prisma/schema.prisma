@@ -56,8 +56,8 @@ model VerificationToken {
 model Joke {
     id    String  @id @default(cuid())
     line  String?
-    bit   Bit?    @relation(fields: [bitId], references: [id])
-    bitId String?
+    bit   Bit     @relation(fields: [bitId], references: [id])
+    bitId String
 }
 
 model Bit {
@@ -65,14 +65,14 @@ model Bit {
     premise String?
     context String?
     jokes   Joke[]
-    topics  Topic?  @relation(fields: [topicId], references: [id])
-    topicId String?
+    topics  Topic   @relation(fields: [topicId], references: [id])
+    topicId String
 }
 
 model Topic {
-    id        String @id @default(cuid())
-    topic     String
+    id        String  @id @default(cuid())
+    topic     String?
     bits      Bit[]
-    user      User   @relation(fields: [userEmail], references: [email])
+    user      User    @relation(fields: [userEmail], references: [email])
     userEmail String
 }
