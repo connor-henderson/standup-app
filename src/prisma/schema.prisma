@@ -51,29 +51,3 @@ model VerificationToken {
 
     @@unique([identifier, token])
 }
-
-model Author {
-    id      String  @id @default(cuid())
-    name    String  @unique
-    image   String?
-    bio     String?
-    website String?
-    works   Work[]
-}
-
-enum Medium {
-    ARTICLE
-    BOOK
-    PODCAST
-    TALK
-}
-
-model Work {
-    id          String @id @default(cuid())
-    authorId    String
-    title       String
-    medium      Medium
-    sections    Json[] // Prisma implements "Json" as jsonb in postgres: https://www.prisma.io/docs/concepts/database-connectors/postgresql
-    externalUrl String
-    Author      Author @relation(fields: [authorId], references: [id])
-}
