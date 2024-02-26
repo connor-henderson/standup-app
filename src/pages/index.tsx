@@ -24,8 +24,7 @@ type Topic = {
 
 export default function Home() {
   const [topics, setTopics] = useState<Topic[]>([]);
-  const [newPremise, setNewPremise] = useState<string>('');
-  const [newJoke, setNewJoke] = useState<string>('');
+  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
 
   const createTopic = async () => {
     const res = await fetch('/api/topics', {
@@ -33,6 +32,7 @@ export default function Home() {
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({ topic: 'New Topic' }), // Pass 'New Topic' as the topic when creating a new topic
     });
     if (res.ok) {
       console.log('New topic created successfully');
@@ -43,72 +43,58 @@ export default function Home() {
     }
   };
 
+  const deleteTopic = async (topicId: string) => {
+    const res = await fetch(`/api/topics/${topicId}`, {
+      method: 'DELETE',
+    });
+    if (res.ok) {
+      console.log('Topic deleted successfully');
+      setTopics(topics.filter((topic) => topic.id !== topicId));
+      setSelectedTopic(null);
+    } else {
+      console.error('Failed to delete topic');
+    }
+  };
+
   useEffect(() => {
-    const fetchTopics = async () => {
+    const fetchAndSetTopics = async () => {
       const res = await fetch('/api/topics');
       if (res.ok) {
         const data = await res.json();
         setTopics(data);
+        setSelectedTopic(data[0]);
       } else {
         console.error('Failed to fetch topics.');
       }
     };
 
-    fetchTopics();
+    fetchAndSetTopics();
   }, []);
-
-  useEffect(() => {
-    console.log(topics);
-  }, [topics]);
 
   return (
     <>
-      <h1 className="text-3xl font-bold underline text-pink-500">
-        Hello world!
-      </h1>
+      <h1 className="text-2xl text-pink-500">Hello world!</h1>
       <button onClick={createTopic}>Create New Topic</button>
-      <div>
-        {topics.map((topic) => (
-          <Topic key={topic.id} topic={topic} />
-        ))}
-      </div>
-      {/* {topics.map((topic) => (
-        <div key={topic.id} className="bg-slate-400">
-          <h3>{topic.topic}</h3>
-          <div className="my-4">
-            <form>
-              <input
-                className="border border-gray-300 rounded p-2"
-                placeholder={`Enter premise for ${topic.topic || ''}`}
-                value={newPremise}
-                onChange={(e) => setNewPremise(e.target.value)}
-              />
-              <button
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                type="submit">
-                Add Bit
-              </button>
-            </form>
-            {topic.bits.map((bit) => (
-              <div key={bit.id} className="my-4 ml-4">
-                <form>
-                  <input
-                    className="border border-gray-300 rounded p-2"
-                    placeholder={`Enter joke for ${bit.premise || ''}`}
-                    value={newJoke}
-                    onChange={(e) => setNewJoke(e.target.value)}
-                  />
-                  <button
-                    className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                    type="submit">
-                    Add Joke
-                  </button>
-                </form>
-              </div>
-            ))}
-          </div>
+      <div style={{ display: 'flex' }}>
+        <div style={{ flex: 1 }}>
+          {topics.map((topic) => (
+            <div
+              key={topic.id}
+              onClick={() => setSelectedTopic(topic)}
+              style={{
+                display: 'flex',
+                justifyContent: 'space-between',
+                alignItems: 'center',
+              }}>
+              <div>{topic.topic}</div>
+              <button onClick={() => deleteTopic(topic.id)}> X </button>
+            </div>
+          ))}
         </div>
-      ))} */}
+        <div style={{ flex: 2 }}>
+          {selectedTopic && <Topic topic={selectedTopic} />}
+        </div>
+      </div>
     </>
   );
 }

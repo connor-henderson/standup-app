@@ -26,14 +26,20 @@ export default async function handler(
             create: [
               {
                 jokes: {
-                  create: [],
+                  create: [{ line: '' }],
                 },
               },
             ],
           },
         },
+        include: {
+          bits: {
+            include: {
+              jokes: true,
+            },
+          },
+        },
       });
-
       res.status(200).json(createdTopic);
     } catch (error) {
       console.error('Request error', error);
