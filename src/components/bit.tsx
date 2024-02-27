@@ -14,7 +14,7 @@ const Bit = ({ bit }) => {
 
   const updateBit = async () => {
     try {
-      const res = await fetch(`/api/topics/${bit.id}/bits/${bit.id}`, {
+      const res = await fetch(`/api/bits/${bit.id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -35,7 +35,7 @@ const Bit = ({ bit }) => {
   };
 
   const deleteBit = async (bitId: string) => {
-    const res = await fetch(`/api/topics/${bitId}/bits/${bitId}`, {
+    const res = await fetch(`/api/bits/${bitId}`, {
       method: 'DELETE',
     });
     if (res.ok) {
@@ -47,7 +47,7 @@ const Bit = ({ bit }) => {
 
   const addJoke = async () => {
     try {
-      const res = await fetch(`/api/topics/${bit.id}/bits/${bit.id}/jokes`, {
+      const res = await fetch(`/api/bits/${bit.id}/jokes`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

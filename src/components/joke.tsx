@@ -9,16 +9,13 @@ const Joke = ({ joke }) => {
 
   const updateJoke = async () => {
     try {
-      const res = await fetch(
-        `/api/topics/${joke.id}/bits/${joke.id}/jokes/${joke.id}`,
-        {
-          method: 'PATCH',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ line }),
-        }
-      );
+      const res = await fetch(`/api/jokes/${joke.id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ line }),
+      });
       if (res.ok) {
         console.log('Joke updated successfully');
       } else {
@@ -34,12 +31,9 @@ const Joke = ({ joke }) => {
   }, [line]);
 
   const deleteJoke = async () => {
-    const res = await fetch(
-      `/api/topics/${joke.id}/bits/${joke.id}/jokes/${joke.id}`,
-      {
-        method: 'DELETE',
-      }
-    );
+    const res = await fetch(`/api/jokes/${joke.id}`, {
+      method: 'DELETE',
+    });
     if (res.ok) {
       console.log('Joke deleted successfully');
     } else {
