@@ -1,30 +1,30 @@
 import { useEffect, useState } from 'react';
 import Topic from '../components/topic';
 
-type Joke = {
+type JokeType = {
   id: string;
   line: string;
   bitId: string;
 };
 
-type Bit = {
+type BitType = {
   id: string;
-  jokes: Joke[];
+  jokes: JokeType[];
   premise: string;
   context: string;
   topicId: string;
 };
 
-type Topic = {
-  bits: Bit[];
+type TopicType = {
+  bits: BitType[];
   id: string;
   topic: string;
   userEmail: string;
 };
 
 export default function Home() {
-  const [topics, setTopics] = useState<Topic[]>([]);
-  const [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
+  const [topics, setTopics] = useState<TopicType[]>([]);
+  const [selectedTopic, setSelectedTopic] = useState<TopicType | null>(null);
 
   const createTopic = async () => {
     const res = await fetch('/api/topics', {
@@ -54,6 +54,13 @@ export default function Home() {
     } else {
       console.error('Failed to delete topic');
     }
+  };
+
+  const setUpdatedTopic = (newTopic: TopicType) => {
+    const newTopics = topics.map((topic) =>
+      topic.id === newTopic.id ? newTopic : topic
+    );
+    setTopics(newTopics);
   };
 
   useEffect(() => {
@@ -92,7 +99,9 @@ export default function Home() {
           ))}
         </div>
         <div style={{ flex: 2 }}>
-          {selectedTopic && <Topic topic={selectedTopic} />}
+          {selectedTopic && (
+            <Topic topic={selectedTopic} setUpdatedTopic={setUpdatedTopic} />
+          )}
         </div>
       </div>
     </>

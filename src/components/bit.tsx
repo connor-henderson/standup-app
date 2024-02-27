@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Joke from './joke';
 
 const Bit = ({ bit }) => {
@@ -10,7 +10,6 @@ const Bit = ({ bit }) => {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setBitDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
-    updateBit(); // Call function to update bit in the database
   };
 
   const updateBit = async () => {
@@ -64,6 +63,10 @@ const Bit = ({ bit }) => {
       console.error('Error adding joke', error);
     }
   };
+
+  useEffect(() => {
+    updateBit();
+  }, [bitDetails]);
 
   return (
     <div className="m-2 p-1">

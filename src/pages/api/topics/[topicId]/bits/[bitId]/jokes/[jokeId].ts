@@ -14,11 +14,10 @@ export default async function handler(
     return res.status(401).end(`Unauthorized`);
   }
 
+  const jokeId = String(req.query.jokeId);
+
   if (req.method === 'DELETE') {
     try {
-      const jokeId = String(req.query.jokeId);
-      console.log('jokeId :', jokeId);
-
       await prisma.joke.delete({
         where: {
           id: jokeId,
@@ -29,6 +28,26 @@ export default async function handler(
       console.error('Request error', error);
       res.status(500).json({
         error: 'Error deleting joke',
+        details: error,
+      });
+    }
+  }
+  if (req.method === 'PATCH') {
+    try {
+      const { line } = req.body;
+
+      const updatedJoke = await prisma.joke.update({
+        where: { id: jokeId },
+        data: {
+          line,
+        },
+      });
+
+      res.status(200).json(updatedJoke);
+    } catch (error) {
+      console.error('Request error', error);
+      res.status(500).json({
+        error: 'Error updating joke',
         details: error,
       });
     }

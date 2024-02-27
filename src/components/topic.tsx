@@ -1,7 +1,7 @@
 import Bit from './bit';
 import { useState, useEffect } from 'react';
 
-const Topic = ({ topic }) => {
+const Topic = ({ topic, setUpdatedTopic }) => {
   const [topicValue, setTopicValue] = useState(topic.topic);
 
   useEffect(() => {
@@ -18,6 +18,9 @@ const Topic = ({ topic }) => {
         body: JSON.stringify({ topic: topicValue }),
       });
       if (res.ok) {
+        const newTopic = await res.json();
+        console.log(newTopic);
+        setUpdatedTopic(newTopic);
         console.log('Topic value updated successfully');
       } else {
         console.error('Failed to update topic value');
@@ -50,7 +53,7 @@ const Topic = ({ topic }) => {
       if (res.ok) {
         console.log('Bit added successfully');
         const newBit = await res.json();
-        console.log(topic);
+        console.log(topic, newBit, 'hello');
       } else {
         console.error('Failed to add bit');
       }
@@ -62,9 +65,11 @@ const Topic = ({ topic }) => {
   const handleChange = (e) => {
     const newTopicValue = e.target.value;
     setTopicValue(newTopicValue);
-
-    void updateTopic();
   };
+
+  useEffect(() => {
+    updateTopic();
+  }, [topicValue]);
 
   return (
     <div

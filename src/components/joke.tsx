@@ -1,24 +1,49 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const Joke = ({ joke }) => {
-  const [jokeDetails, setJokeDetails] = useState({ content: joke.content });
+  const [line, setLine] = useState(joke.line);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setJokeDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
+    setLine(e.target.value);
   };
 
-  const deleteJoke = async (jokeId: string) => {
+  const updateJoke = async () => {
+    try {
+      const res = await fetch(
+        `/api/topics/${joke.id}/bits/${joke.id}/jokes/${joke.id}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ line }),
+        }
+      );
+      if (res.ok) {
+        console.log('Joke updated successfully');
+      } else {
+        console.error('Failed to update joke');
+      }
+    } catch (error) {
+      console.error('Error updating joke', error);
+    }
+  };
+
+  useEffect(() => {
+    updateJoke();
+  }, [line]);
+
+  const deleteJoke = async () => {
     const res = await fetch(
-      `/api/topics/${jokeId}/bits/${jokeId}/jokes/${jokeId}`,
+      `/api/topics/${joke.id}/bits/${joke.id}/jokes/${joke.id}`,
       {
         method: 'DELETE',
       }
     );
     if (res.ok) {
-      console.log('Topic deleted successfully');
+      console.log('Joke deleted successfully');
     } else {
-      console.error('Failed to delete topic');
+      console.error('Failed to delete joke');
     }
   };
 
@@ -26,12 +51,12 @@ const Joke = ({ joke }) => {
     <div style={{ marginLeft: '20px' }}>
       <label>Joke: </label>
       <textarea
-        name="content"
-        value={jokeDetails.content}
+        name="line"
+        value={line}
         onChange={handleChange}
         style={{ color: 'black', width: '100%', minHeight: '100px' }}
       />
-      <button onClick={() => deleteJoke(joke.id)}>X</button>
+      <button onClick={() => deleteJoke()}>X</button>
     </div>
   );
 };
