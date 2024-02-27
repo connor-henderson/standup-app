@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Topic from '../components/topic';
+import AIAssistant from '../components/ai-assistant';
 
 type JokeType = {
   id: string;
@@ -98,6 +99,7 @@ export default function Home() {
             </div>
           ))}
         </div>
+        <AIAssistant />
         <div style={{ flex: 2 }}>
           {selectedTopic && (
             <Topic topic={selectedTopic} setUpdatedTopic={setUpdatedTopic} />
