@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-const Joke = ({ joke }) => {
+const Joke = ({ joke, setJokes }) => {
   const [line, setLine] = useState(joke.line);
 
   const handleChange = (e) => {
@@ -36,6 +36,7 @@ const Joke = ({ joke }) => {
     });
     if (res.ok) {
       console.log('Joke deleted successfully');
+      setJokes((jokes) => jokes.filter((j) => j.id !== joke.id));
     } else {
       console.error('Failed to delete joke');
     }

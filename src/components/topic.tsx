@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 
 const Topic = ({ topic, setUpdatedTopic }) => {
   const [topicValue, setTopicValue] = useState(topic.topic);
+  const [bits, setBits] = useState([]);
 
   useEffect(() => {
     setTopicValue(topic.topic);
@@ -19,7 +20,6 @@ const Topic = ({ topic, setUpdatedTopic }) => {
       });
       if (res.ok) {
         const newTopic = await res.json();
-        console.log(newTopic);
         setUpdatedTopic(newTopic);
         console.log('Topic value updated successfully');
       } else {
@@ -53,7 +53,7 @@ const Topic = ({ topic, setUpdatedTopic }) => {
       if (res.ok) {
         console.log('Bit added successfully');
         const newBit = await res.json();
-        console.log(topic, newBit, 'hello');
+        setBits([...bits, newBit]);
       } else {
         console.error('Failed to add bit');
       }
@@ -61,6 +61,20 @@ const Topic = ({ topic, setUpdatedTopic }) => {
       console.error('Error adding bit', error);
     }
   };
+
+  useEffect(() => {
+    const fetchAndSetBits = async () => {
+      const res = await fetch(`/api/topics/${topic.id}/bits`);
+      if (res.ok) {
+        const data = await res.json();
+        setBits(data);
+      } else {
+        console.error('Failed to fetch topics.');
+      }
+    };
+
+    fetchAndSetBits();
+  }, [topic]);
 
   const handleChange = (e) => {
     const newTopicValue = e.target.value;
@@ -88,8 +102,8 @@ const Topic = ({ topic, setUpdatedTopic }) => {
         onChange={handleChange}
         style={{ color: 'black' }}
       />
-      {topic.bits?.map((bit) => (
-        <Bit key={bit.id} bit={bit} />
+      {bits?.map((bit) => (
+        <Bit key={bit.id} setBits={setBits} bit={bit} />
       ))}
       <button onClick={addBit}>Add Bit</button>
     </div>

@@ -1,8 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { PrismaClient } from '@prisma/client';
 import { getSession } from 'next-auth/react';
-
-const prisma = new PrismaClient();
+import prisma from '../../../../lib/prismadb';
 
 export default async function handler(
   req: NextApiRequest,
@@ -77,6 +76,6 @@ export default async function handler(
     }
   } else {
     res.setHeader('Allow', ['GET', 'POST', 'PATCH']);
-    return res.status(405).end(`Method ${req.method} Not Allowed`);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }

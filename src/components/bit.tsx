@@ -1,11 +1,12 @@
 import { useEffect, useState } from 'react';
 import Joke from './joke';
 
-const Bit = ({ bit }) => {
+const Bit = ({ bit, setBits }) => {
   const [bitDetails, setBitDetails] = useState({
     premise: bit.premise,
     context: bit.context,
   });
+  const [jokes, setJokes] = useState(bit.jokes);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,6 +41,7 @@ const Bit = ({ bit }) => {
     });
     if (res.ok) {
       console.log('Bit deleted successfully');
+      setBits((bits) => bits.filter((bit) => bit.id !== bitId));
     } else {
       console.error('Failed to delete bit');
     }
@@ -56,6 +58,8 @@ const Bit = ({ bit }) => {
       });
       if (res.ok) {
         console.log('Joke added successfully');
+        const newJoke = await res.json();
+        setJokes([...jokes, newJoke]);
       } else {
         console.error('Failed to add joke');
       }
@@ -84,8 +88,8 @@ const Bit = ({ bit }) => {
         onChange={handleChange}
         style={{ color: 'black' }}
       />
-      {bit.jokes?.map((joke) => (
-        <Joke key={joke.id} joke={joke} />
+      {jokes?.map((joke) => (
+        <Joke key={joke.id} setJokes={setJokes} joke={joke} />
       ))}
       <button onClick={() => deleteBit(bit.id)}>X</button>
       <button onClick={addJoke}>Add Joke</button>
