@@ -12,22 +12,54 @@ const Chat = ({ assistantChoice }: { assistantChoice: string }) => {
   const [numExamples, setNumExamples] = useState(1); // Added state for numExamples
   const jokeTypes = ['sarcasm', 'saying it without saying it'];
 
+  const exampleBitQuestions = [
+    'What is it like',
+    'Who instead?',
+    'Why? Why not?.',
+    'What’ s involved ?',
+    'Where / Where else?',
+    'How instead?',
+    'If that’ s true, why not this?',
+    'Who is involved in this ? Who else is there?',
+    'Who is affected by this ?',
+    'Who is oppositely affected by this ?',
+    'Who needs this.?',
+  ];
+
+  const getPrompt = () => {
+    let prompt = inputValue.trim();
+    let prefix = '';
+    if (assistantChoice === 'Associations') {
+      prefix =
+        'Respond with about 30 word / phrase associations for the following phrase, separated by a `\n` character';
+    } else if (assistantChoice === 'Jokes') {
+      const selectedJokes = jokeTypes
+        .filter((type) => selectedJokeTypes[type])
+        .join(', ');
+      prefix = `Respond with ${numExamples} for each of the following types of jokes and Label them with a header: ${selectedJokes}. Use this as subject matter context for the jokes: `;
+    } else if (assistantChoice === 'Topics') {
+      prefix =
+        'Help come up with good topics for writing standup material. ' +
+        'Almost anything can be a good topic, the point of what we are doing ' +
+        'now is to simply brainstorm by coming up with a diverse set of potential topics. ' +
+        'Please help me do this by coming back with a variety of words and phrases that might ' +
+        `be worth discussing general area of `;
+      // "Some example topics people discuss are experiences growing up, things that have changed in their life recently, " +
+      // "travel, recent news, pop culture, music, ";
+    } else if (assistantChoice === 'Bits') {
+      prefix =
+        `Help me develop a bit / premise for jokes. Good ones are clear and state an opinion about how a person feels or thinks about a particular thing. It might be helpful to give some examples based on the topic below and also to ask a set of follow up questions geared around the below topic. Here are some examples of the types of follow up questions that can be relevant, but by no means is it exhaustive: ${exampleBitQuestions}` +
+        "I'm trying to develop one on the topic of ";
+    }
+    prompt = prefix + prompt;
+    return prompt;
+  };
+
   const sendMessage = async () => {
     // Send the user's message to the server
     try {
       setLoading(true); // Set loading to true when sending message
-      let prompt = inputValue.trim();
-      let prefix = '';
-      if (assistantChoice === 'Associations') {
-        prefix =
-          'Respond with about 30 word / phrase associations for the following phrase, separated by a `\n` character';
-      } else if (assistantChoice === 'Examples') {
-        const selectedJokes = jokeTypes
-          .filter((type) => selectedJokeTypes[type])
-          .join(', ');
-        prefix = `Respond with ${numExamples} for each of the following types of jokes and Label them with a header: ${selectedJokes}. Use this as subject matter context for the jokes: `;
-      }
-      prompt = prefix + prompt;
+      const prompt = getPrompt();
       const response = await fetch('/api/chat', {
         method: 'POST',
         headers: {
@@ -61,10 +93,10 @@ const Chat = ({ assistantChoice }: { assistantChoice: string }) => {
         onChange={(e) => setInputValue(e.target.value)}
       />
       <button onClick={onSubmit}>➡️</button>
-      {assistantChoice === 'Examples' && (
+      {assistantChoice === 'Jokes' && (
         <div>
           <label>
-            Number of Examples:
+            Number of example jokes:
             <select
               value={numExamples}
               onChange={(e) => setNumExamples(parseInt(e.target.value))}>
