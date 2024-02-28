@@ -8,7 +8,7 @@ const AIAssistant = () => {
   );
 
   return (
-    <div className="m-5 p-2 border border-gray-400 rounded-lg min-w-80">
+    <div className="m-5 p-2 border border-gray-400 rounded-lg max-w-lg">
       AI Assistant
       <div>
         {options.map((option) => (
@@ -24,7 +24,7 @@ const AIAssistant = () => {
           </div>
         ))}
       </div>
-      {assistantChoice === 'Chat' && <Chat />}
+      <Chat assistantChoice={assistantChoice} />
     </div>
   );
 };
