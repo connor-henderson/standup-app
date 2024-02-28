@@ -5,7 +5,7 @@ const Chat = () => {
   const [inputValue, setInputValue] = useState('');
   const [streamedResponse, setStreamedResponse] = useState('');
   
-  const sendMessage = async (message) => {
+  const sendMessage = async () => {
     // Send the user's message to the server
     try {
       const response = await fetch("/api/chat", {
@@ -13,7 +13,7 @@ const Chat = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ message }),
+        body: JSON.stringify({ prompt: inputValue }),
       });
       const data = await response.json();
       setStreamedResponse(data.message)
