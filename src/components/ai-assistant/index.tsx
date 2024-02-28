@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Chat from './chat';
 
 const AIAssistant = () => {
-  const options = ['Chat', 'Associations'];
+  const options = ['Chat', 'Associations', 'Examples'];
   const [assistantChoice, setAssistantChoice] = useState<string | null>(
     options[0]
   );

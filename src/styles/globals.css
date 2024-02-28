@@ -30,5 +30,11 @@ body {
   .text-balance {
     text-wrap: balance;
   }
-}
 
+  input,
+  textarea,
+  select,
+  checkbox {
+    background-color: #808080; /* Darker gray background color */
+  }
+}
