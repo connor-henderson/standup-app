@@ -26,7 +26,7 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx",
+    "**/*.tsx", "src/services/openaiClient.js",
   ],
   "exclude": [
     "node_modules"
