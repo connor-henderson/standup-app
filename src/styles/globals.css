@@ -40,5 +40,11 @@ body {
 }
 
 .markdown-content p {
-  margin-bottom: 1rem; /* Adjust the value as needed */
+  margin-top: 10px;
+  margin-bottom: 3px;
+}
+
+.markdown-content li {
+  margin-bottom: 3px;
+  list-style-type: disc;
 }

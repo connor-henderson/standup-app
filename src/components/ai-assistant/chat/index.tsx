@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from 'react';
 import ReactMarkdown from 'react-markdown';
 
-const Chat = ({ assistantChoice }: { assistantChoice: string }) => {
-  const [inputValue, setInputValue] = useState('');
-  const [streamedResponse, setStreamedResponse] = useState('');
+const Chat = ({
+  assistantChoice,
+  chatProps,
+  setChatProps,
+}: {
+  assistantChoice: string;
+  chatProps: any;
+  setChatProps: any;
+}) => {
+  const { inputValue, streamedResponse } = chatProps[assistantChoice]; // Key into chatProps based on assistantChoice
+
   const [loading, setLoading] = useState(false); // Added loading state
-  console.log(streamedResponse);
   const [selectedJokeTypes, setSelectedJokeTypes] = useState({
     sarcasm: false,
     'saying it without saying it': false,
@@ -62,7 +69,6 @@ const Chat = ({ assistantChoice }: { assistantChoice: string }) => {
       const selectedJokes = jokeTypes
         .filter((type) => selectedJokeTypes[type])
         .join(', ');
-      console.log(numExamples, 'numExamples');
       prefix = `Respond with ${numExamples} for each of the following types of jokes and Label them with a header: ${selectedJokes}. Use this as subject matter context for the jokes: `;
     } else if (assistantChoice === 'Topics') {
       prefix =
@@ -95,7 +101,13 @@ const Chat = ({ assistantChoice }: { assistantChoice: string }) => {
         body: JSON.stringify({ prompt }),
       });
       const data = await response.json();
-      setStreamedResponse(data.message);
+      setChatProps({
+        ...chatProps,
+        [assistantChoice]: {
+          ...chatProps[assistantChoice],
+          streamedResponse: data.message,
+        },
+      });
     } catch (error) {
       console.error('Error sending message:', error);
     } finally {
@@ -117,7 +129,15 @@ const Chat = ({ assistantChoice }: { assistantChoice: string }) => {
       <textarea
         style={{ color: 'black', height: '10vh' }}
         value={inputValue}
-        onChange={(e) => setInputValue(e.target.value)}
+        onChange={(e) =>
+          setChatProps({
+            ...chatProps,
+            [assistantChoice]: {
+              ...chatProps[assistantChoice],
+              inputValue: e.target.value,
+            },
+          })
+        }
       />
       <button onClick={onSubmit}>➡️</button>
       {assistantChoice === 'Jokes' && (
