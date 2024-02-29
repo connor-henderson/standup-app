@@ -89,7 +89,9 @@ const Chat = ({
   const getPrompt = () => {
     let prompt = inputValue.trim();
     let prefix = '';
-    if (assistantChoice === 'Associations') {
+    if (assistantChoice === 'Chat') {
+      prefix = 'For context, here is my current topic: ' + topic; // where my topic, premise, context, and joke develpment currently stands
+    } else if (assistantChoice === 'Associations') {
       prefix =
         'Respond with about 30 word / phrase associations for the following phrase, each separated by a comma and space';
     } else if (assistantChoice === 'Jokes') {
