@@ -1,7 +1,9 @@
 import { useEffect, useState } from 'react';
+import useDebounce from '../hooks/useDebounce';
 
 const Joke = ({ joke, setJokes }) => {
   const [line, setLine] = useState(joke.line);
+  const debouncedLine = useDebounce(line, 500);
 
   const handleChange = (e) => {
     setLine(e.target.value);
@@ -14,7 +16,7 @@ const Joke = ({ joke, setJokes }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ line }),
+        body: JSON.stringify({ line: debouncedLine }),
       });
       if (res.ok) {
         console.log('Joke updated successfully');
@@ -28,7 +30,7 @@ const Joke = ({ joke, setJokes }) => {
 
   useEffect(() => {
     updateJoke();
-  }, [line]);
+  }, [debouncedLine]);
 
   const deleteJoke = async () => {
     const res = await fetch(`/api/jokes/${joke.id}`, {

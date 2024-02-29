@@ -1,8 +1,10 @@
+import useDebounce from '../hooks/useDebounce';
 import Bit from './bit';
 import { useState, useEffect } from 'react';
 
 const Topic = ({ topic, setUpdatedTopic }) => {
   const [topicValue, setTopicValue] = useState(topic.topic);
+  const debouncedTopicValue = useDebounce(topicValue, 500);
   const [bits, setBits] = useState([]);
 
   useEffect(() => {
@@ -16,7 +18,7 @@ const Topic = ({ topic, setUpdatedTopic }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ topic: topicValue }),
+        body: JSON.stringify({ topic: debouncedTopicValue }),
       });
       if (res.ok) {
         const newTopic = await res.json();
@@ -83,7 +85,7 @@ const Topic = ({ topic, setUpdatedTopic }) => {
 
   useEffect(() => {
     updateTopic();
-  }, [topicValue]);
+  }, [debouncedTopicValue]);
 
   return (
     <div

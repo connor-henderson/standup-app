@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import Joke from './joke';
+import useDebounce from '../hooks/useDebounce';
 
 const Bit = ({ bit, setBits }) => {
   const [bitDetails, setBitDetails] = useState({
@@ -7,6 +8,7 @@ const Bit = ({ bit, setBits }) => {
     context: bit.context,
   });
   const [jokes, setJokes] = useState(bit.jokes);
+  const debouncedBitDetails = useDebounce(bitDetails, 500);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -21,8 +23,8 @@ const Bit = ({ bit, setBits }) => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          premise: bitDetails.premise,
-          context: bitDetails.context,
+          premise: debouncedBitDetails.premise,
+          context: debouncedBitDetails.context,
         }),
       });
       if (res.ok) {
@@ -70,7 +72,7 @@ const Bit = ({ bit, setBits }) => {
 
   useEffect(() => {
     updateBit();
-  }, [bitDetails]);
+  }, [debouncedBitDetails]);
 
   return (
     <div className="m-2 p-1">
