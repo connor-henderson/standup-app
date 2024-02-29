@@ -5,10 +5,12 @@ const Chat = ({
   assistantChoice,
   chatProps,
   setChatProps,
+  topic,
 }: {
   assistantChoice: string;
   chatProps: any;
   setChatProps: any;
+  topic: string;
 }) => {
   const { inputValue, streamedResponse } = chatProps[assistantChoice]; // Key into chatProps based on assistantChoice
 
@@ -154,7 +156,7 @@ const Chat = ({
     let label = '';
     switch (assistantChoice) {
       case 'Chat':
-        label = '';
+        label = `Chat with your draft preloaded into context`;
         break;
       case 'Associations':
         label = 'Get associations for any word or phrase';
@@ -171,14 +173,26 @@ const Chat = ({
       default:
         label = 'Custom instructions: ';
     }
-    return label;
+    if (assistantChoice === 'Chat')
+      return (
+        <div>
+          <p className="italic inline">{label}</p>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <img
+              src="/draft.svg"
+              alt="Draft"
+              style={{ width: '20px', backgroundColor: 'white' }}
+            />
+            <p className="ml-2">{topic}</p>
+          </div>
+        </div>
+      );
+    else return <p className="italic inline">{label}</p>;
   };
 
   return (
     <div>
-      <div>
-        <p>{getLabel()}</p>
-      </div>
+      <div className="mb-2">{getLabel()}</div>
       <textarea
         style={{ color: 'black', height: '10vh' }}
         value={inputValue}

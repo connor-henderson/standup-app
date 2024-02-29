@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Chat from './chat';
 
-const AIAssistant = () => {
+const AIAssistant = ({ topic }: { topic: string }) => {
   const options = ['Chat', 'Associations', 'Topics', 'Bits', 'Jokes'];
   const [assistantChoice, setAssistantChoice] = useState<string>(options[0]);
   // Create the appropriate props here
@@ -39,6 +39,7 @@ const AIAssistant = () => {
         assistantChoice={assistantChoice}
         chatProps={chatProps}
         setChatProps={setChatProps}
+        topic={topic}
       />
     </div>
   );

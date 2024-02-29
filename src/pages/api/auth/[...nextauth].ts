@@ -11,4 +11,11 @@ export default NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
     }),
   ],
+  pages: {
+    signIn: '/notebook',
+    // signOut: '/admin/signout',
+    // error: '/auth/expired-link',
+    // verifyRequest: '/assessment',
+    // newUser: '/auth/verified-email',
+  },
 });
