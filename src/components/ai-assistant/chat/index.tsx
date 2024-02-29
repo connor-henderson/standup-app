@@ -1,16 +1,42 @@
-import OpenAI from 'openai';
 import React, { useEffect, useState } from 'react';
+import ReactMarkdown from 'react-markdown';
 
 const Chat = ({ assistantChoice }: { assistantChoice: string }) => {
   const [inputValue, setInputValue] = useState('');
   const [streamedResponse, setStreamedResponse] = useState('');
   const [loading, setLoading] = useState(false); // Added loading state
+  console.log(streamedResponse);
   const [selectedJokeTypes, setSelectedJokeTypes] = useState({
     sarcasm: false,
     'saying it without saying it': false,
+    Exaggeration: false,
+    Understatement: false,
+    Misdirection: false,
+    'Illogical conclusions': false,
+    Substitution: false,
+    Comparison: false,
+    'Unspoken conclusion': false,
+    'Jumping to conclusions': false,
+    'Taking things too literally': false,
+    'Recognition Laughs': false,
+    'Personification / Act–outs': false,
   }); // Added state for selected joke types
   const [numExamples, setNumExamples] = useState(1); // Added state for numExamples
-  const jokeTypes = ['sarcasm', 'saying it without saying it'];
+  const jokeTypes = [
+    'sarcasm',
+    'saying it without saying it',
+    'Exaggeration',
+    'Understatement',
+    'Misdirection',
+    'Illogical conclusions',
+    'Substitution',
+    'Comparison',
+    'Unspoken conclusion',
+    'Jumping to conclusions',
+    'Taking things too literally',
+    'Recognition Laughs',
+    'Personification / Act–outs',
+  ];
 
   const exampleBitQuestions = [
     'What is it like',
@@ -36,6 +62,7 @@ const Chat = ({ assistantChoice }: { assistantChoice: string }) => {
       const selectedJokes = jokeTypes
         .filter((type) => selectedJokeTypes[type])
         .join(', ');
+      console.log(numExamples, 'numExamples');
       prefix = `Respond with ${numExamples} for each of the following types of jokes and Label them with a header: ${selectedJokes}. Use this as subject matter context for the jokes: `;
     } else if (assistantChoice === 'Topics') {
       prefix =
@@ -127,7 +154,9 @@ const Chat = ({ assistantChoice }: { assistantChoice: string }) => {
       {loading ? (
         <LoadingCircle />
       ) : (
-        <div style={{ color: 'blue' }}>{streamedResponse}</div>
+        <div className="text-green-500 markdown-content">
+          <ReactMarkdown>{streamedResponse}</ReactMarkdown>
+        </div>
       )}
     </div>
   );
