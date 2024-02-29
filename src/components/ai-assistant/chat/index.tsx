@@ -14,36 +14,61 @@ const Chat = ({
 
   const [loading, setLoading] = useState(false); // Added loading state
   const [selectedJokeTypes, setSelectedJokeTypes] = useState({
-    sarcasm: false,
-    'saying it without saying it': false,
-    Exaggeration: false,
-    Understatement: false,
-    Misdirection: false,
-    'Illogical conclusions': false,
-    Substitution: false,
-    Comparison: false,
-    'Unspoken conclusion': false,
-    'Jumping to conclusions': false,
-    'Taking things too literally': false,
-    'Recognition Laughs': false,
-    'Personification / Act–outs': false,
+    sarcasm: {
+      selected: false,
+      description: 'Using irony to mock or convey contempt',
+    },
+    'saying it without saying it': {
+      selected: false,
+      description: 'Implying something without explicitly stating it',
+    },
+    Exaggeration: {
+      selected: false,
+      description: 'Overstating or magnifying the truth',
+    },
+    Understatement: {
+      selected: false,
+      description: 'Presenting something as less important than it actually is',
+    },
+    Misdirection: {
+      selected: false,
+      description: 'Deliberately leading the audience in the wrong direction',
+    },
+    'Illogical conclusions': {
+      selected: false,
+      description: 'Drawing conclusions that do not logically follow',
+    },
+    Substitution: {
+      selected: false,
+      description: 'Replacing one element with another for comedic effect',
+    },
+    Comparison: {
+      selected: false,
+      description: 'Highlighting similarities or differences for humor',
+    },
+    'Unspoken conclusion': {
+      selected: false,
+      description: 'Implied punchline without explicitly stating it',
+    },
+    'Jumping to conclusions': {
+      selected: false,
+      description: 'Making hasty or illogical assumptions',
+    },
+    'Taking things too literally': {
+      selected: false,
+      description: 'Interpreting things in a strictly literal sense',
+    },
+    'Recognition Laughs': {
+      selected: false,
+      description: 'Humor derived from shared experiences or references',
+    },
+    'Personification / Act–outs': {
+      selected: false,
+      description:
+        'Giving human traits to non-human objects or acting out scenarios',
+    },
   }); // Added state for selected joke types
   const [numExamples, setNumExamples] = useState(1); // Added state for numExamples
-  const jokeTypes = [
-    'sarcasm',
-    'saying it without saying it',
-    'Exaggeration',
-    'Understatement',
-    'Misdirection',
-    'Illogical conclusions',
-    'Substitution',
-    'Comparison',
-    'Unspoken conclusion',
-    'Jumping to conclusions',
-    'Taking things too literally',
-    'Recognition Laughs',
-    'Personification / Act–outs',
-  ];
 
   const exampleBitQuestions = [
     'What is it like',
@@ -64,12 +89,13 @@ const Chat = ({
     let prefix = '';
     if (assistantChoice === 'Associations') {
       prefix =
-        'Respond with about 30 word / phrase associations for the following phrase, separated by a `\n` character';
+        'Respond with about 30 word / phrase associations for the following phrase, each separated by a comma and space';
     } else if (assistantChoice === 'Jokes') {
-      const selectedJokes = jokeTypes
-        .filter((type) => selectedJokeTypes[type])
+      const selectedJokes = Object.keys(selectedJokeTypes)
+        .filter((type) => selectedJokeTypes[type]['selected'])
+        .map((key) => `${key} (${selectedJokeTypes[key]['description']})`)
         .join(', ');
-      prefix = `Respond with ${numExamples} for each of the following types of jokes and Label them with a header: ${selectedJokes}. Use this as subject matter context for the jokes: `;
+      prefix = `Respond with ${numExamples} example(s) for each of the following types of jokes and Label them with a header: ${selectedJokes}. Only respond with a header of the joke type and then the jokes, for each joke type. Use this as subject matter context for the jokes: `;
     } else if (assistantChoice === 'Topics') {
       prefix =
         'Help come up with good topics for writing standup material. ' +
@@ -124,8 +150,35 @@ const Chat = ({
   // Loading circle component
   const LoadingCircle = () => <div className="loading-circle">Loading... </div>;
 
+  const getLabel = () => {
+    let label = '';
+    switch (assistantChoice) {
+      case 'Chat':
+        label = '';
+        break;
+      case 'Associations':
+        label = 'Get associations for any word or phrase';
+        break;
+      case 'Topics':
+        label = 'Get help choosing a topic';
+        break;
+      case 'Bits':
+        label = 'Get help coming up with a bit';
+        break;
+      case 'Jokes':
+        label = 'Get some example jokes for any given topic or premise';
+        break;
+      default:
+        label = 'Custom instructions: ';
+    }
+    return label;
+  };
+
   return (
     <div>
+      <div>
+        <p>{getLabel()}</p>
+      </div>
       <textarea
         style={{ color: 'black', height: '10vh' }}
         value={inputValue}
@@ -154,15 +207,18 @@ const Chat = ({
               ))}
             </select>
           </label>
-          {jokeTypes.map((type) => (
+          {Object.keys(selectedJokeTypes).map((type) => (
             <label key={type}>
               <input
                 type="checkbox"
-                checked={selectedJokeTypes[type]}
+                checked={selectedJokeTypes[type]['selected']}
                 onChange={() =>
                   setSelectedJokeTypes({
                     ...selectedJokeTypes,
-                    [type]: !selectedJokeTypes[type],
+                    [type]: {
+                      ...selectedJokeTypes[type],
+                      selected: !selectedJokeTypes[type]['selected'],
+                    },
                   })
                 }
               />
