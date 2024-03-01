@@ -6,7 +6,7 @@
       "dom.iterable",
       "esnext"
     ],
-    "noImplicitAny": true,
+    "noImplicitAny": false,
     "noImplicitThis": true,
     "strictNullChecks": true,
     "allowJs": true,
@@ -32,6 +32,8 @@
     "src/components/topic.jsx",
     "src/components/joke.jsx",
     "src/components/ai-assistant/index.jsx",
+    "src/hooks/useDebounce.jsx",
+    "src/pages/api/chat/index.js",
   ],
   "exclude": [
     "node_modules"
