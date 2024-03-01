@@ -81,7 +81,7 @@ export default function Home() {
 
   return (
     <>
-      <h1 className="text-4xl font-bold text-pink-500 mb-8">Comedy Notebook</h1>
+      <h1 className="text-4xl font-bold text-blue-500 mb-8">Comedy Notebook</h1>
       <button className="custom-btn mb-4" onClick={createTopic}>
         Create New Topic
       </button>

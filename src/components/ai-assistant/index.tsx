@@ -13,7 +13,7 @@ const AIAssistant = ({ topic }: { topic: string }) => {
 
   return (
     <div className="m-5 p-4 bg-navy-600 shadow-lg rounded-lg max-w-lg">
-      <h2 className="text-3xl font-bold text-pink-500 mb-4">AI Assistant</h2>
+      <h2 className="text-3xl font-bold text-blue-500 mb-4">AI Assistant</h2>
       <div className="options-container mb-6">
         <div className="flex justify-between">
           {options.map((option) => (
