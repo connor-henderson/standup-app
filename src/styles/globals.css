@@ -35,7 +35,7 @@ body {
 }
 
 .markdown-content p {
-  @apply my-2 text-base leading-relaxed text-gray-300;
+  @apply my-2 text-base leading-relaxed text-gray-800;
 }
 
 .markdown-content li {
