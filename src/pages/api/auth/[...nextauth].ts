@@ -12,10 +12,10 @@ export default NextAuth({
     }),
   ],
   pages: {
-    signIn: '/notebook',
+    // signIn: '/notebook',
     // signOut: '/admin/signout',
     // error: '/auth/expired-link',
-    // verifyRequest: '/assessment',
+    // verifyRequest: '/notebook',
     // newUser: '/auth/verified-email',
   },
 });
