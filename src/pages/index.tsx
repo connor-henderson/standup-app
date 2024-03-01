@@ -1,8 +1,19 @@
 import { signOut, useSession } from 'next-auth/react';
 import Link from 'next/link'; // Added import for Link
+import { useEffect } from 'react';
 
 const T = () => {
   const { data: session, status } = useSession();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await fetch('/api/hello');
+      const data = await result.json();
+      console.log(data);
+    };
+    fetchData();
+  }, []);
+
   if (status === 'authenticated') {
     return (
       <div className="flex flex-col items-center justify-center space-y-4 p-4">
