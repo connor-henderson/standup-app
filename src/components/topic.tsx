@@ -77,20 +77,20 @@ const Topic: React.FC<TopicProps> = ({ topic, setUpdatedTopic }) => {
   }, [debouncedTopicValue]);
 
   return (
-    <div className="topic-container m-5 p-2 border border-gray-500 rounded-lg relative bg-navy-600 shadow-lg">
-      <p className="text-white font-semibold">Topic:</p>
+    <div className="topic-container m-5 p-4 border-4 border-gray-600 rounded-xl relative bg-gradient-to-r from-gray-700 to-gray-900 shadow-xl">
+      <p className="text-gray-300 font-bold text-lg">Topic:</p>
       <input
         name="topic"
         value={topicValue}
         onChange={handleChange}
-        className="topic-input w-full p-2 mt-2 mb-4 bg-gray-700 border border-gray-600 rounded-md shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50 text-white"
+        className="topic-input w-full p-3 mt-3 mb-5 bg-gray-800 border-2 border-gray-600 rounded-lg shadow-inner focus:border-gray-500 focus:ring focus:ring-gray-300 focus:ring-opacity-50 text-white"
       />
       {bits.map((bit) => (
         <Bit key={bit.id} setBits={setBits} bit={bit} />
       ))}
       <button
         onClick={addBit}
-        className="add-bit-btn mt-4 px-4 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg transition-colors">
+        className="add-bit-btn mt-5 px-5 py-3 bg-gray-600 hover:bg-gray-700 text-white font-bold rounded-lg transition-colors ease-in-out duration-300">
         Add Bit
       </button>
     </div>

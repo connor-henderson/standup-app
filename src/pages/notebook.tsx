@@ -85,8 +85,8 @@ export default function Home() {
       <button className="custom-btn mb-4" onClick={createTopic}>
         Create New Topic
       </button>
-      <div className="flex">
-        <div className="max-w-[400px]">
+      <div className="flex flex-col md:flex-row">
+        <div className="max-w-full md:max-w-[400px] mb-4 md:mb-0">
           {topics.map((topic) => (
             <div
               key={topic.id}
@@ -108,7 +108,7 @@ export default function Home() {
             </div>
           ))}
         </div>
-        <div className="flex-1 mr-4">
+        <div className="flex-1 mb-4 md:mb-0 md:mr-4">
           <AIAssistant topic={selectedTopic?.topic || ''} />
         </div>
         <div className="flex-auto">

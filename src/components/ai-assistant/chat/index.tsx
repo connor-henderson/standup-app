@@ -192,7 +192,7 @@ const Chat = ({
     <div className="bg-gray-100 p-4 rounded-lg shadow-lg">
       <div className="mb-4 text-lg font-semibold">{getLabel()}</div>
       <textarea
-        className="mt-4 w-full p-2 text-black rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
+        className="mt-4 w-full p-2 text-white rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
         rows={4}
         placeholder="Enter any custom instructions..."
         value={inputValue}
