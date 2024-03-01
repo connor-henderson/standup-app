@@ -87,26 +87,30 @@ export default function Home() {
       </button>
       <div className="flex flex-col md:flex-row">
         <div className="max-w-full md:max-w-[400px] mb-4 md:mb-0">
-          {topics.map((topic) => (
-            <div
-              key={topic.id}
-              onClick={() => setSelectedTopic(topic)}
-              className="flex justify-between items-center p-2 m-2 bg-navy-600 rounded-lg cursor-pointer hover:bg-navy-500 transition-colors">
-              <div className="text-white">
-                {topic.topic.length > 20
-                  ? `${topic.topic.substring(0, 17)}...`
-                  : topic.topic}
+        {topics.map((topic) => {
+            const bgColor =
+              selectedTopic?.id === topic.id ? 'bg-gray-500' : 'bg-navy-600';
+            return (
+              <div
+                key={topic.id}
+                onClick={() => setSelectedTopic(topic)}
+                className={`flex justify-between items-center p-2 m-2 ${bgColor} rounded-lg cursor-pointer hover:bg-navy-500 transition-colors`}>
+                <div className="text-white">
+                  {topic.topic.length > 20
+                    ? `${topic.topic.substring(0, 17)}...`
+                    : topic.topic}
+                </div>
+                <button
+                  className="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    deleteTopic(topic.id);
+                  }}>
+                  Delete
+                </button>
               </div>
-              <button
-                className="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
-                onClick={(e) => {
-                  e.stopPropagation();
-                  deleteTopic(topic.id);
-                }}>
-                Delete
-              </button>
-            </div>
-          ))}
+            );
+          })}
         </div>
         <div className="flex-1 mb-4 md:mb-0 md:mr-4">
           <AIAssistant topic={selectedTopic?.topic || ''} />

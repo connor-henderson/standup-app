@@ -181,7 +181,9 @@ const Chat = ({
         {assistantChoice === 'Chat' && (
           <div className="flex items-center mt-2">
             <img src="/draft.svg" alt="Draft" className="w-5 h-5 bg-white" />
-            <p className="ml-2 text-sm font-medium">{topic}</p>
+            <p className="ml-2 text-sm text-gray-800 bold font-medium">
+              {topic}
+            </p>
           </div>
         )}
       </div>
