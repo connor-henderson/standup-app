@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import Chat from './chat';
+import Chat from './chat/index.jsx';
 
-const AIAssistant = ({ topic }: { topic: string }) => {
+const AIAssistant = ({ topic }) => {
   const options = ['Chat', 'Associations', 'Topics', 'Bits', 'Jokes'];
-  const [assistantChoice, setAssistantChoice] = useState<string>(options[0]);
+  const [assistantChoice, setAssistantChoice] = useState(options[0]);
   // Create the appropriate props here
   const initialChatProps = {};
   options.forEach((option) => {

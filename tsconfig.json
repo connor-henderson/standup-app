@@ -26,7 +26,12 @@
   "include": [
     "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx", "src/services/openaiClient.js",
+    "**/*.tsx",
+    "src/services/openaiClient.js",
+    "src/components/ai-assistant/chat/index.jsx",
+    "src/components/topic.jsx",
+    "src/components/joke.jsx",
+    "src/components/ai-assistant/index.jsx",
   ],
   "exclude": [
     "node_modules"

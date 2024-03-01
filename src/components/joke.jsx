@@ -1,19 +1,11 @@
 import { useEffect, useState, ChangeEvent } from 'react';
 import useDebounce from '../hooks/useDebounce';
 
-interface JokeProps {
-  joke: {
-    id: string;
-    line: string;
-  };
-  setJokes: (jokes: JokeProps['joke'][]) => void;
-}
-
-const Joke: React.FC<JokeProps> = ({ joke, setJokes }) => {
-  const [line, setLine] = useState<string>(joke.line);
+const Joke = ({ joke, setJokes }) => {
+  const [line, setLine] = useState(joke.line);
   const debouncedLine = useDebounce(line, 500);
 
-  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
+  const handleChange = (e) => {
     setLine(e.target.value);
   };
 
@@ -42,7 +34,9 @@ const Joke: React.FC<JokeProps> = ({ joke, setJokes }) => {
         method: 'DELETE',
       });
       if (!res.ok) throw new Error('Failed to delete joke');
-      setJokes((jokes) => jokes.filter((j) => j.id !== joke.id));
+      setJokes((jokes) =>
+        jokes.filter((j) => j.id !== joke.id)
+      );
     } catch (error) {
       console.error('Error deleting joke', error);
     }

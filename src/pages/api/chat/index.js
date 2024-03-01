@@ -10,7 +10,7 @@ const openai = new OpenAI({
 export default async function handler(req, res) {
   const { method } = req;
   // const openai = getOpenAIClient();
-  let chatHistory: ChatCompletionCreateParamsBase['messages'] = [
+  let chatHistory = [
     { role: 'system', content: 'You are a helpful assistant.' },
   ];
   let prompt = req.body.prompt;

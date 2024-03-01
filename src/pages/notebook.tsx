@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import Topic from '../components/topic';
+import Topic from '../components/topic.jsx';
 import AIAssistant from '../components/ai-assistant';
 
 type JokeType = {
@@ -87,7 +87,7 @@ export default function Home() {
       </button>
       <div className="flex flex-col md:flex-row">
         <div className="max-w-full md:max-w-[400px] mb-4 md:mb-0">
-        {topics.map((topic) => {
+          {topics.map((topic) => {
             const bgColor =
               selectedTopic?.id === topic.id ? 'bg-gray-500' : 'bg-navy-600';
             return (

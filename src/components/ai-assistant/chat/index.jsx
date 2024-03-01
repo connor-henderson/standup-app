@@ -6,11 +6,6 @@ const Chat = ({
   chatProps,
   setChatProps,
   topic,
-}: {
-  assistantChoice: string;
-  chatProps: any;
-  setChatProps: any;
-  topic: string;
 }) => {
   const { inputValue, streamedResponse } = chatProps[assistantChoice]; // Key into chatProps based on assistantChoice
 
@@ -68,6 +63,11 @@ const Chat = ({
       selected: false,
       description:
         'Giving human traits to non-human objects or acting out scenarios',
+    },
+    'Shock value': {
+      selected: false,
+      description:
+        'Saying something so surprising and often offensive that it gets a laugh',
     },
   }); // Added state for selected joke types
   const [numExamples, setNumExamples] = useState(1); // Added state for numExamples
@@ -282,3 +282,4 @@ const Chat = ({
 };
 
 export default Chat;
+

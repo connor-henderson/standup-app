@@ -2,16 +2,8 @@ import useDebounce from '../hooks/useDebounce';
 import Bit from './bit';
 import { useState, useEffect } from 'react';
 
-interface TopicProps {
-  topic: {
-    id: string;
-    topic: string;
-  };
-  setUpdatedTopic: (topic: { id: string; topic: string }) => void;
-}
-
-const Topic: React.FC<TopicProps> = ({ topic, setUpdatedTopic }) => {
-  const [topicValue, setTopicValue] = useState<string>(topic.topic);
+const Topic = ({ topic, setUpdatedTopic }) => {
+  const [topicValue, setTopicValue] = useState(topic.topic);
   const debouncedTopicValue = useDebounce(topicValue, 500);
   const [bits, setBits] = useState([]);
 
@@ -68,7 +60,7 @@ const Topic: React.FC<TopicProps> = ({ topic, setUpdatedTopic }) => {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e) => {
     setTopicValue(e.target.value);
   };
 
