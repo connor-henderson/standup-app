@@ -4,11 +4,11 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "npx prisma generate  --schema ./src/prisma/schema.prisma && next build",
+    "build": "npm run prisma:migrate && npx prisma generate --schema ./src/prisma/schema.prisma && next build",
     "start": "next start",
     "lint": "next lint src --ext ts,tsx,js,jsx",
     "lint:fix": "npm run lint -- --fix",
-    "migrate": "npx prisma migrate dev --schema src/prisma/schema.prisma",
+    "prisma:migrate": "npx prisma migrate deploy --schema ./src/prisma/schema.prisma",
     "seed": "ts-node-esm src/prisma/seed.ts",
     "env": "ts-node-esm -r ./src/server/init",
     "test": "NODE_ENV=test npm run knex:migrate && jest --detectOpenHandles --forceExit",
