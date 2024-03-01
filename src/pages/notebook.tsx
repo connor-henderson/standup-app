@@ -81,26 +81,37 @@ export default function Home() {
 
   return (
     <>
-      <h1 className="text-2xl text-pink-500">Hello world!</h1>
-      <button onClick={createTopic}>Create New Topic</button>
-      <div style={{ display: 'flex' }}>
-        <div style={{ flex: 1 }}>
+      <h1 className="text-4xl font-bold text-pink-500 mb-8">Comedy Notebook</h1>
+      <button className="custom-btn mb-4" onClick={createTopic}>
+        Create New Topic
+      </button>
+      <div className="flex">
+        <div className="max-w-[400px]">
           {topics.map((topic) => (
             <div
               key={topic.id}
               onClick={() => setSelectedTopic(topic)}
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-              }}>
-              <div>{topic.topic}</div>
-              <button onClick={() => deleteTopic(topic.id)}> X </button>
+              className="flex justify-between items-center p-2 m-2 bg-navy-600 rounded-lg cursor-pointer hover:bg-navy-500 transition-colors">
+              <div className="text-white">
+                {topic.topic.length > 20
+                  ? `${topic.topic.substring(0, 17)}...`
+                  : topic.topic}
+              </div>
+              <button
+                className="bg-red-600 hover:bg-red-700 text-white font-bold py-1 px-2 rounded"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  deleteTopic(topic.id);
+                }}>
+                Delete
+              </button>
             </div>
           ))}
         </div>
-        <AIAssistant topic={selectedTopic?.topic || ''} />
-        <div style={{ flex: 2 }}>
+        <div className="flex-1 mr-4">
+          <AIAssistant topic={selectedTopic?.topic || ''} />
+        </div>
+        <div className="flex-auto">
           {selectedTopic && (
             <Topic topic={selectedTopic} setUpdatedTopic={setUpdatedTopic} />
           )}

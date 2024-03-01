@@ -3,48 +3,41 @@
 @tailwind utilities;
 
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+  --primary-color: 34, 197, 94; /* Green */
+  --secondary-color: 239, 68, 68; /* Red */
+  --background-color: 29, 39, 54; /* Navy */
+  --text-color: 255, 255, 255; /* White */
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+  color: rgb(var(--text-color));
+  background-color: rgb(var(--background-color));
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
+  .custom-btn {
+    @apply px-4 py-2 bg-green-500 text-white font-bold rounded-lg transition-colors;
+    &:hover {
+      @apply bg-green-600;
+    }
   }
 
   input,
   textarea,
-  select,
-  checkbox {
-    background-color: #808080; /* Darker gray background color */
+  select {
+    @apply bg-gray-700 border border-gray-600 rounded-md shadow-sm focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50;
+  }
+
+  .custom-checkbox {
+    @apply rounded border-gray-600 text-green-600 focus:border-green-500 focus:ring focus:ring-green-200 focus:ring-opacity-50;
   }
 }
 
 .markdown-content p {
-  margin-top: 10px;
-  margin-bottom: 3px;
+  @apply my-2 text-base leading-relaxed text-gray-300;
 }
 
 .markdown-content li {
-  margin-bottom: 3px;
-  list-style-type: disc;
+  @apply mb-1 list-disc list-inside;
 }

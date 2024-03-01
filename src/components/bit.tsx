@@ -96,11 +96,12 @@ const Bit: React.FC<BitProps> = ({ bit, setBits }) => {
           <label
             htmlFor="premise"
             className="block text-lg font-semibold text-gray-700">
-            Premise:
+            Premise
           </label>
           <input
             id="premise"
             name="premise"
+            placeholder="What is this bit's premise?"
             value={bitDetails.premise}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300"
@@ -110,11 +111,12 @@ const Bit: React.FC<BitProps> = ({ bit, setBits }) => {
           <label
             htmlFor="context"
             className="block text-lg font-semibold text-gray-700">
-            Context:
+            Context
           </label>
           <textarea
             id="context"
             name="context"
+            placeholder="Add some context for this bit"
             value={bitDetails.context}
             onChange={handleChange}
             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300"
