@@ -1,16 +1,30 @@
-import { useEffect, useState } from 'react';
+import React, { useEffect, useState, ChangeEvent } from 'react';
 import Joke from './joke';
 import useDebounce from '../hooks/useDebounce';
 
-const Bit = ({ bit, setBits }) => {
-  const [bitDetails, setBitDetails] = useState({
+interface BitProps {
+  bit: {
+    id: string;
+    premise: string;
+    context: string;
+    jokes: Array<{ id: string; line: string }>;
+  };
+  setBits: React.Dispatch<React.SetStateAction<BitProps['bit'][]>>;
+}
+
+const Bit: React.FC<BitProps> = ({ bit, setBits }) => {
+  const [bitDetails, setBitDetails] = useState<
+    Pick<BitProps['bit'], 'premise' | 'context'>
+  >({
     premise: bit.premise,
     context: bit.context,
   });
-  const [jokes, setJokes] = useState(bit.jokes);
+  const [jokes, setJokes] = useState<BitProps['bit']['jokes']>(bit.jokes);
   const debouncedBitDetails = useDebounce(bitDetails, 500);
 
-  const handleChange = (e) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setBitDetails((prevDetails) => ({ ...prevDetails, [name]: value }));
   };
@@ -22,10 +36,7 @@ const Bit = ({ bit, setBits }) => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          premise: debouncedBitDetails.premise,
-          context: debouncedBitDetails.context,
-        }),
+        body: JSON.stringify(debouncedBitDetails),
       });
       if (res.ok) {
         console.log('Bit updated successfully');
@@ -37,15 +48,19 @@ const Bit = ({ bit, setBits }) => {
     }
   };
 
-  const deleteBit = async (bitId: string) => {
-    const res = await fetch(`/api/bits/${bitId}`, {
-      method: 'DELETE',
-    });
-    if (res.ok) {
-      console.log('Bit deleted successfully');
-      setBits((bits) => bits.filter((bit) => bit.id !== bitId));
-    } else {
-      console.error('Failed to delete bit');
+  const deleteBit = async () => {
+    try {
+      const res = await fetch(`/api/bits/${bit.id}`, {
+        method: 'DELETE',
+      });
+      if (res.ok) {
+        console.log('Bit deleted successfully');
+        setBits((bits) => bits.filter((b) => b.id !== bit.id));
+      } else {
+        console.error('Failed to delete bit');
+      }
+    } catch (error) {
+      console.error('Error deleting bit', error);
     }
   };
 
@@ -61,7 +76,7 @@ const Bit = ({ bit, setBits }) => {
       if (res.ok) {
         console.log('Joke added successfully');
         const newJoke = await res.json();
-        setJokes([...jokes, newJoke]);
+        setJokes((prevJokes) => [...prevJokes, newJoke]);
       } else {
         console.error('Failed to add joke');
       }
@@ -75,26 +90,55 @@ const Bit = ({ bit, setBits }) => {
   }, [debouncedBitDetails]);
 
   return (
-    <div className="m-2 p-1">
-      <label htmlFor="name">Bit:</label>
-      <input
-        name="premise"
-        value={bitDetails.premise}
-        onChange={handleChange}
-        style={{ color: 'black' }}
-      />
-      <label htmlFor="context">Context:</label>
-      <textarea
-        name="context"
-        value={bitDetails.context}
-        onChange={handleChange}
-        style={{ color: 'black' }}
-      />
-      {jokes?.map((joke) => (
-        <Joke key={joke.id} setJokes={setJokes} joke={joke} />
-      ))}
-      <button onClick={() => deleteBit(bit.id)}>X</button>
-      <button onClick={addJoke}>Add Joke</button>
+    <div className="bit-container m-4 p-4 bg-gray-50 shadow-lg rounded-lg">
+      <div className="bit-details mb-4">
+        <div className="mb-2">
+          <label
+            htmlFor="premise"
+            className="block text-lg font-semibold text-gray-700">
+            Premise:
+          </label>
+          <input
+            id="premise"
+            name="premise"
+            value={bitDetails.premise}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300"
+          />
+        </div>
+        <div>
+          <label
+            htmlFor="context"
+            className="block text-lg font-semibold text-gray-700">
+            Context:
+          </label>
+          <textarea
+            id="context"
+            name="context"
+            value={bitDetails.context}
+            onChange={handleChange}
+            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-orange-300"
+            rows={4}
+          />
+        </div>
+      </div>
+      <div className="jokes-list mb-4">
+        {jokes.map((joke) => (
+          <Joke key={joke.id} setJokes={setJokes} joke={joke} />
+        ))}
+      </div>
+      <div className="bit-actions flex justify-between">
+        <button
+          onClick={deleteBit}
+          className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-700 transition-colors">
+          Delete
+        </button>
+        <button
+          onClick={addJoke}
+          className="px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-700 transition-colors">
+          Add Joke
+        </button>
+      </div>
     </div>
   );
 };

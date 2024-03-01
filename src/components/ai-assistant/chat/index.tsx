@@ -196,7 +196,10 @@ const Chat = ({
     <div>
       <div className="mb-2">{getLabel()}</div>
       <textarea
-        style={{ color: 'black', height: '10vh' }}
+        // style={{ color: 'black', height: '10vh' }}
+        className="mt-2 w-full black rounded-lg border-gray-200 align-top shadow-sm sm:text-sm"
+        rows={4}
+        placeholder="Enter any additional order notes..."
         value={inputValue}
         onChange={(e) =>
           setChatProps({

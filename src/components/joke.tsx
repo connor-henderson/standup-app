@@ -1,59 +1,71 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, ChangeEvent } from 'react';
 import useDebounce from '../hooks/useDebounce';
 
-const Joke = ({ joke, setJokes }) => {
-  const [line, setLine] = useState(joke.line);
+interface JokeProps {
+  joke: {
+    id: string;
+    line: string;
+  };
+  setJokes: (jokes: JokeProps['joke'][]) => void;
+}
+
+const Joke: React.FC<JokeProps> = ({ joke, setJokes }) => {
+  const [line, setLine] = useState<string>(joke.line);
   const debouncedLine = useDebounce(line, 500);
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setLine(e.target.value);
   };
 
-  const updateJoke = async () => {
-    try {
-      const res = await fetch(`/api/jokes/${joke.id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ line: debouncedLine }),
-      });
-      if (res.ok) {
-        console.log('Joke updated successfully');
-      } else {
-        console.error('Failed to update joke');
-      }
-    } catch (error) {
-      console.error('Error updating joke', error);
-    }
-  };
-
   useEffect(() => {
+    const updateJoke = async () => {
+      try {
+        const res = await fetch(`/api/jokes/${joke.id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ line: debouncedLine }),
+        });
+        if (!res.ok) throw new Error('Failed to update joke');
+      } catch (error) {
+        console.error('Error updating joke', error);
+      }
+    };
+
     updateJoke();
-  }, [debouncedLine]);
+  }, [debouncedLine, joke.id]);
 
   const deleteJoke = async () => {
-    const res = await fetch(`/api/jokes/${joke.id}`, {
-      method: 'DELETE',
-    });
-    if (res.ok) {
-      console.log('Joke deleted successfully');
+    try {
+      const res = await fetch(`/api/jokes/${joke.id}`, {
+        method: 'DELETE',
+      });
+      if (!res.ok) throw new Error('Failed to delete joke');
       setJokes((jokes) => jokes.filter((j) => j.id !== joke.id));
-    } else {
-      console.error('Failed to delete joke');
+    } catch (error) {
+      console.error('Error deleting joke', error);
     }
   };
 
   return (
-    <div style={{ marginLeft: '20px' }}>
-      <label>Joke: </label>
+    <div className="joke-container ml-5 bg-gray-100 p-4 rounded-lg shadow">
+      <label
+        htmlFor="joke-line"
+        className="block text-lg font-medium text-gray-700">
+        Edit Joke:
+      </label>
       <textarea
+        id="joke-line"
         name="line"
         value={line}
         onChange={handleChange}
-        style={{ color: 'black', width: '100%', minHeight: '100px' }}
-      />
-      <button onClick={() => deleteJoke()}>X</button>
+        className="joke-textarea mt-1 text-black w-full min-h-[100px] border-gray-300 focus:ring-blue-500 focus:border-blue-500 block rounded-md shadow-sm"></textarea>
+      <button
+        onClick={deleteJoke}
+        className="delete-joke-btn mt-2 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+        Delete
+      </button>
     </div>
   );
 };
